@@ -3,8 +3,13 @@ import ExpenseDate from "./ExpenseDate";
 import "./ExpenseItem.css";
 
 function ExpenseItem({ title, amount, date }) {
+  /* COMMENT: How Component functions are executed
+    When we used our custom components in JSX, i.e <Card />, React is aware that it
+    must execute our functions, which return JSX (cycle repeats until all functions
+    have been executed). All functions are executed once at runtime unless state changes
+  */
   const clickHandler = () => {
-    console.log("clicked!");
+    title = "New title";
   };
 
   return (
@@ -14,7 +19,7 @@ function ExpenseItem({ title, amount, date }) {
         <h2>{title}</h2>
         <div className="expense-item__price">${amount}</div>
       </div>
-      {/* COMMENT
+      {/* COMMENT: Adding event listeners to Nodes
         React exposes default Element events, starting with on
         callbacks are added to callback queue
       */}
