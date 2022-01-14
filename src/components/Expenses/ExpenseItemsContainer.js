@@ -5,7 +5,7 @@ import ExpensesFilter from "./ExpensesFilter";
 import { useState } from "react";
 
 function ExpenseItemsContainer({ expenses }) {
-  const [filteredYear, setFilteredYear] = useState("");
+  const [filteredYear, setFilteredYear] = useState("2022");
   const updateUserSelectedYear = (year) => {
     setFilteredYear(year);
 
@@ -25,7 +25,10 @@ function ExpenseItemsContainer({ expenses }) {
 
   return (
     <Card className="expenses">
-      <ExpensesFilter onChangeFilter={updateUserSelectedYear} />
+      <ExpensesFilter
+        selected={filteredYear}
+        onChangeFilter={updateUserSelectedYear}
+      />
 
       {expenseItemsJSX}
     </Card>
