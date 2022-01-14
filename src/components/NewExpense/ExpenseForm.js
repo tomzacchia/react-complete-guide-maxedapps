@@ -7,7 +7,7 @@ const INITIAL_STATE = {
   date: "",
 };
 
-function ExpenseForm(props) {
+function ExpenseForm({ liftExpenseDataToParentHandler }) {
   const [formState, setFormState] = useState(INITIAL_STATE);
 
   const titleChangeHandler = (event) => {
@@ -22,7 +22,10 @@ function ExpenseForm(props) {
   const submitHandler = (event) => {
     event.preventDefault();
 
-    console.log({ ...formState, date: new Date(formState.date) });
+    liftExpenseDataToParentHandler({
+      ...formState,
+      date: new Date(formState.date),
+    });
 
     setFormState({ ...INITIAL_STATE });
   };
@@ -32,13 +35,6 @@ function ExpenseForm(props) {
       <div className="new-expense__controls">
         <div className="new-expense__control">
           <label>Title</label>
-          {/* COMMENT: Two way binding with forms (Controlled Components)
-              - HTML elements maintain their own state based on user input
-              - We can make React state a "single source of truth" as such our 
-                component handles what happens in our form on subsequent user input
-              - this is achieved by setting value attribute on form, display value
-                will always be state.value
-           */}
           <input
             type="text"
             name="title"
