@@ -2,7 +2,6 @@ import Card from "components/UI/Card";
 import ExpenseDate from "./ExpenseDate";
 import "./ExpenseItem.css";
 
-// we get props as the first argument to our component
 function ExpenseItem({ title, amount, date }) {
   return (
     <Card className="expense-item">
