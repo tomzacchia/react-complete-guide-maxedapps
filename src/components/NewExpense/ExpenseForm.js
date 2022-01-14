@@ -2,19 +2,6 @@ import "./ExpenseForm.css";
 import { useState } from "react";
 
 function ExpenseForm(props) {
-  // const [enteredTitle, setEnteredTitle] = useState("");
-
-  // const titleChangeHandler = (event) => {
-  //   const enteredTitle = event.target.value;
-  //   setEnteredTitle(enteredTitle);
-  // };
-
-  /* COMMENT: Handling multiple inputs
-    We can either have individual states and/or handlers for each state
-    or we can hold related states in one data structure. Here we choose
-    to funnel all form controls into one handler, using name attribute
-    on control to determine which property in formState needs to be updated
-  */
   const [formState, setFormState] = useState({
     title: "",
     amount: "",
@@ -24,7 +11,15 @@ function ExpenseForm(props) {
   const titleChangeHandler = (event) => {
     const userInput = event.target.value;
     const fromStateKey = event.target.name;
-    setFormState({ ...formState, [fromStateKey]: userInput });
+    /* COMMENT: Updating state that depends on previous state
+      In certain cases if our state update depends on previous state and
+      we are making multiple updates to the same state we could be
+      referencing an out of date value. To minimize edge cases the 
+      safest option is to pass a callback to setState()
+    */
+    setFormState((previousState) => {
+      return { ...previousState, [fromStateKey]: userInput };
+    });
   };
 
   return (
