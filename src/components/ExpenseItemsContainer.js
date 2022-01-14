@@ -12,7 +12,7 @@ function ExpenseItemsContainer({ expenses }) {
       />
     );
   });
-  return <div>{expenseItemsJSX}</div>;
+  return <div className="expenses">{expenseItemsJSX}</div>;
 }
 
 export default ExpenseItemsContainer;
