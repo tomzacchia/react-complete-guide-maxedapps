@@ -1,28 +1,29 @@
 import Card from "components/UI/Card";
 import ExpenseDate from "./ExpenseDate";
 import "./ExpenseItem.css";
+import { useState } from "react";
 
 function ExpenseItem({ title, amount, date }) {
-  /* COMMENT: How Component functions are executed
-    When we used our custom components in JSX, i.e <Card />, React is aware that it
-    must execute our functions, which return JSX (cycle repeats until all functions
-    have been executed). All functions are executed once at runtime unless state changes
+  /* COMMENT: Intro to useState
+    - useState(initialValue) returns 1) value of state, stored in our variable, 
+    and 2) function for updating our state value
+    - the returned method not only updates our state variable value but also
+    triggers a re-render of our component
   */
+  const [expenseTitle, setExpenseTitle] = useState(title);
+
   const clickHandler = () => {
-    title = "New title";
+    setExpenseTitle("New Title");
+    console.log(title); // consoles old value since updating state is async (gets scheduled)
   };
 
   return (
     <Card className="expense-item">
       <ExpenseDate date={date} />
       <div className="expense-item__description">
-        <h2>{title}</h2>
+        <h2>{expenseTitle}</h2>
         <div className="expense-item__price">${amount}</div>
       </div>
-      {/* COMMENT: Adding event listeners to Nodes
-        React exposes default Element events, starting with on
-        callbacks are added to callback queue
-      */}
       <button onClick={clickHandler}>Change Title</button>
     </Card>
   );
