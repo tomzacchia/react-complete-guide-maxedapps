@@ -1,6 +1,6 @@
 import "./ExpenseItemsContainer.css";
 import ExpenseItem from "./ExpenseItem";
-import Card from "./Card";
+import Card from "components/UI/Card";
 
 function ExpenseItemsContainer({ expenses }) {
   const expenseItemsJSX = expenses.map((expense, index) => {

@@ -1,4 +1,4 @@
-import ExpenseItemsContainer from "components/ExpenseItemsContainer";
+import ExpenseItemsContainer from "components/Expenses/ExpenseItemsContainer";
 import { React } from "react";
 
 function App() {
