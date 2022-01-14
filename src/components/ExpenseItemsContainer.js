@@ -1,5 +1,6 @@
 import "./ExpenseItemsContainer.css";
 import ExpenseItem from "./ExpenseItem";
+import Card from "./Card";
 
 function ExpenseItemsContainer({ expenses }) {
   const expenseItemsJSX = expenses.map((expense, index) => {
@@ -12,7 +13,7 @@ function ExpenseItemsContainer({ expenses }) {
       />
     );
   });
-  return <div className="expenses">{expenseItemsJSX}</div>;
+  return <Card className="expenses">{expenseItemsJSX}</Card>;
 }
 
 export default ExpenseItemsContainer;
