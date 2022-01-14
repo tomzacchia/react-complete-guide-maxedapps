@@ -1,8 +1,17 @@
 import "./ExpenseItemsContainer.css";
 import ExpenseItem from "./ExpenseItem";
 import Card from "components/UI/Card";
+import ExpensesFilter from "./ExpensesFilter";
+import { useState } from "react";
 
 function ExpenseItemsContainer({ expenses }) {
+  const [filteredYear, setFilteredYear] = useState("2022");
+  const updateUserSelectedYear = (year) => {
+    setFilteredYear(year);
+
+    console.log(`in ExpenseItemsContainer: ${year}`);
+  };
+
   const expenseItemsJSX = expenses.map((expense, index) => {
     return (
       <ExpenseItem
@@ -13,7 +22,17 @@ function ExpenseItemsContainer({ expenses }) {
       />
     );
   });
-  return <Card className="expenses">{expenseItemsJSX}</Card>;
+
+  return (
+    <Card className="expenses">
+      <ExpensesFilter
+        selected={filteredYear}
+        onChangeFilter={updateUserSelectedYear}
+      />
+
+      {expenseItemsJSX}
+    </Card>
+  );
 }
 
 export default ExpenseItemsContainer;
