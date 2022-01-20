@@ -5,6 +5,7 @@ import ExpensesFilter from "./ExpensesFilter";
 import { useState } from "react";
 import _ from "lodash";
 import ExpensesList from "./ExpensesList";
+import ExpensesChart from "./ExpensesChart";
 
 function ExpenseItemsContainer({ expenses }) {
   const [filteredYear, setFilteredYear] = useState("2022");
@@ -24,6 +25,7 @@ function ExpenseItemsContainer({ expenses }) {
         selected={filteredYear}
         onChangeFilter={updateUserSelectedYear}
       />
+      <ExpensesChart expenses={expenseItemsFiltered} />
       <ExpensesList expenses={expenseItemsFiltered} />
     </Card>
   );
