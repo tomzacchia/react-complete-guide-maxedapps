@@ -10,12 +10,16 @@ const INITIAL_STATE = {
 function ExpenseForm({ liftExpenseDataToParentHandler }) {
   const [formState, setFormState] = useState(INITIAL_STATE);
 
-  const titleChangeHandler = (event) => {
-    const userInput = event.target.value;
-    const fromStateKey = event.target.name;
+  const formControlChangeHandler = (event) => {
+    let userInput = event.target.value;
+    // Expense Amount should be type Number
+    if (event.target.name === "amount") {
+      userInput = parseInt(userInput);
+    }
+    const stateKey = event.target.name;
 
     setFormState((previousState) => {
-      return { ...previousState, [fromStateKey]: userInput };
+      return { ...previousState, [stateKey]: userInput };
     });
   };
 
@@ -39,7 +43,7 @@ function ExpenseForm({ liftExpenseDataToParentHandler }) {
             type="text"
             name="title"
             value={formState.title}
-            onChange={titleChangeHandler}
+            onChange={formControlChangeHandler}
           />
         </div>
         <div className="new-expense__control">
@@ -50,7 +54,7 @@ function ExpenseForm({ liftExpenseDataToParentHandler }) {
             value={formState.amount}
             min="0.1"
             step="0.01"
-            onChange={titleChangeHandler}
+            onChange={formControlChangeHandler}
           />
         </div>
         <div className="new-expense__control">
@@ -61,7 +65,7 @@ function ExpenseForm({ liftExpenseDataToParentHandler }) {
             value={formState.date}
             min="2022-01-01"
             max="2024-12-31"
-            onChange={titleChangeHandler}
+            onChange={formControlChangeHandler}
           />
         </div>
       </div>
