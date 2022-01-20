@@ -3,16 +3,21 @@ import ExpenseItem from "./ExpenseItem";
 import Card from "components/UI/Card";
 import ExpensesFilter from "./ExpensesFilter";
 import { useState } from "react";
+import _ from "lodash";
 
 function ExpenseItemsContainer({ expenses }) {
   const [filteredYear, setFilteredYear] = useState("2022");
   const updateUserSelectedYear = (year) => {
     setFilteredYear(year);
-
-    console.log(`in ExpenseItemsContainer: ${year}`);
   };
 
-  const expenseItemsJSX = expenses.map(mapExpenseToJSX);
+  const filterByUserSelectedYear = _.curry(filterByYear)(
+    parseInt(filteredYear)
+  );
+
+  const expenseItemsJSX = expenses
+    .filter(filterByUserSelectedYear)
+    .map(mapExpenseToJSX);
 
   return (
     <Card className="expenses">
@@ -24,6 +29,12 @@ function ExpenseItemsContainer({ expenses }) {
       {expenseItemsJSX}
     </Card>
   );
+}
+
+function filterByYear(year, expense) {
+  const expenseYear = expense.date.getFullYear();
+
+  return expenseYear === year;
 }
 
 function mapExpenseToJSX(expense) {
