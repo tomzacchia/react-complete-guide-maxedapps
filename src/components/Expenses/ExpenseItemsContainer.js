@@ -12,16 +12,7 @@ function ExpenseItemsContainer({ expenses }) {
     console.log(`in ExpenseItemsContainer: ${year}`);
   };
 
-  const expenseItemsJSX = expenses.map((expense, index) => {
-    return (
-      <ExpenseItem
-        title={expense.title}
-        amount={expense.amount}
-        date={expense.date}
-        key={index}
-      />
-    );
-  });
+  const expenseItemsJSX = expenses.map(mapExpenseToJSX);
 
   return (
     <Card className="expenses">
@@ -32,6 +23,17 @@ function ExpenseItemsContainer({ expenses }) {
 
       {expenseItemsJSX}
     </Card>
+  );
+}
+
+function mapExpenseToJSX(expense) {
+  return (
+    <ExpenseItem
+      title={expense.title}
+      amount={expense.amount}
+      date={expense.date}
+      key={expense.id}
+    />
   );
 }
 

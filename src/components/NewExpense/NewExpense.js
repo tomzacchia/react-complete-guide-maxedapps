@@ -1,14 +1,14 @@
 import ExpenseForm from "./ExpenseForm";
 import "./NewExpense.css";
 
-function NewExpense({ addNewUserExpenseHandler }) {
+function NewExpense({ addNewExpenseHandler }) {
   const liftExpenseDataToParentHandler = (formState) => {
     const expenseObjWithID = {
       ...formState,
       id: Math.random().toString(),
     };
 
-    addNewUserExpenseHandler(expenseObjWithID);
+    addNewExpenseHandler(expenseObjWithID);
   };
   return (
     <div className="new-expense">
