@@ -15,9 +15,7 @@ function ExpenseItemsContainer({ expenses }) {
     parseInt(filteredYear)
   );
 
-  const expenseItemsJSX = expenses
-    .filter(filterByUserSelectedYear)
-    .map(mapExpenseToJSX);
+  const expenseItemsFiltered = expenses.filter(filterByUserSelectedYear);
 
   return (
     <Card className="expenses">
@@ -26,9 +24,28 @@ function ExpenseItemsContainer({ expenses }) {
         onChangeFilter={updateUserSelectedYear}
       />
 
-      {expenseItemsJSX}
+      {/* 
+        NOTE: && can be used to replace falg ? <Component /> : null statements 
+        RESOURCE: https://www.chakshunyu.com/blog/react-readability-analysis-of-inline-conditional-rendering/
+      */}
+      {renderExpensesIfLengthGreaterThanZero(expenseItemsFiltered)}
     </Card>
   );
+}
+
+/**
+ *
+ * @param {*} expenses : array of expense items
+ */
+function renderExpensesIfLengthGreaterThanZero(expenses) {
+  const shouldShow = expenses.length > 0;
+  let JSX = "";
+
+  shouldShow
+    ? (JSX = expenses.map(mapExpenseToJSX))
+    : (JSX = <p> No Expense Found</p>);
+
+  return JSX;
 }
 
 function filterByYear(year, expense) {
