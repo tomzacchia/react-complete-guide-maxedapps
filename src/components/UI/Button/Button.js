@@ -1,10 +1,15 @@
-import React from 'react';
+import React from "react";
 
-import './Button.css';
+/**
+ * NOTE
+ *  - to use css modules we import our styles as follows
+ *  - our styles defined in modules.css can be accessed via obj.key
+ */
+import styles from "./Button.module.css";
 
-const Button = props => {
+const Button = (props) => {
   return (
-    <button type={props.type} className="button" onClick={props.onClick}>
+    <button type={props.type} className={styles.button} onClick={props.onClick}>
       {props.children}
     </button>
   );
