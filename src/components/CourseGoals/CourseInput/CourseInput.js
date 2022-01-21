@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 
 import Button from "../../UI/Button/Button";
-import "./CourseInput.css";
+import styles from "./CourseInput.module.css";
 
 const CourseInput = (props) => {
   const [enteredValue, setEnteredValue] = useState("");
@@ -26,8 +26,12 @@ const CourseInput = (props) => {
 
   return (
     <form onSubmit={formSubmitHandler}>
-      <div className={`form-control ${isInputInvalid && "invalid"}`}>
-        {/* <label style={{ color: !isInputValueValid ? "red" : "black" }}> */}
+      {/* NOTE: we values of styles[key] are hashed strings  */}
+      <div
+        className={`${styles["form-control"]}  ${
+          isInputInvalid && styles.invalid
+        }`}
+      >
         <label>Course Goal</label>
         <input type="text" onChange={goalInputChangeHandler} />
       </div>
