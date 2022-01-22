@@ -46,11 +46,11 @@ const AddUser = (props) => {
 
   return (
     /**
-     * NOTE: all wrapper does is return props.children without needing to nest adjacent
-     * children within a <div> </div> that serves no semantic purpose. When react
-     * renders our adjacent children in the DOM we wont have <div> hell
+     * NOTE: React.Fragment allows us to achieve the same outcome as our custom
+     * <Wrapper /> component. This API allows us to group children without
+     * adding extra nodes to the DOM
      */
-    <Wrapper>
+    <React.Fragment>
       {error && (
         <ErrorModal
           title={error.title}
@@ -77,7 +77,7 @@ const AddUser = (props) => {
           <Button type="submit">Add User</Button>
         </form>
       </Card>
-    </Wrapper>
+    </React.Fragment>
   );
 };
 
