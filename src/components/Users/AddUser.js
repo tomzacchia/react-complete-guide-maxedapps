@@ -45,11 +45,6 @@ const AddUser = (props) => {
   };
 
   return (
-    /**
-     * NOTE: React.Fragment allows us to achieve the same outcome as our custom
-     * <Wrapper /> component. This API allows us to group children without
-     * adding extra nodes to the DOM
-     */
     <React.Fragment>
       {error && (
         <ErrorModal
