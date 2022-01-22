@@ -28,15 +28,6 @@ function ModalOverlay(props) {
 const ErrorModal = (props) => {
   return (
     <React.Fragment>
-      {/* 
-        NOTE: Portals allow us to render children into a DOM node that exists outside
-        the DOM hierchy of the parent. We need the following in order to use Portals
-        1) Our <Component /> 2) The DOM element where our <Component /> will be rendered
-        It behaves like a normal React child in every other way, i.e event bubbling
-
-        WHY? In this case we want to render our modal at root level instead of nested
-        deeply. This can be useful for screen readers and such
-      */}
       {ReactDOM.createPortal(
         <Backdrop onConfirm={props.onConfirm} />,
         document.getElementById("backdrop-root")
