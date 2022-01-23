@@ -42,14 +42,6 @@ const Login = (props) => {
     isValid: null,
   });
 
-  /**
-   * EFFECT OPTIMIZATION: we use oject destructuring to minimize the number of times
-   * our effect executes. There exists a case where the email and password are already
-   * valid. For exmaple, it will be unecessary to update `formIsValid` if the user
-   * continues to add characters to their password. This kind of optimization
-   * is useful when our effect only depends on one property of an object
-   * instead of the entire object.
-   */
   const { isValid: isEmailValid } = emailState;
   const { isValid: isPasswordValid } = passwordState;
 

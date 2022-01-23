@@ -25,6 +25,11 @@ function App() {
 
   return (
     <React.Fragment>
+      {/* 
+        NOTE: we pass 'isLoggedIn' and 'logoutHandler' as props into MainHeader
+        however MainHeader only uses these props to pass them into the
+        Navigation component. Instead of prop drilling we can leverage contextAPI
+      */}
       <MainHeader isAuthenticated={isLoggedIn} onLogout={logoutHandler} />
       <main>
         {!isLoggedIn && <Login onLogin={loginHandler} />}
