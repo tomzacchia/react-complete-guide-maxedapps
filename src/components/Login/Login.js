@@ -4,8 +4,6 @@ import Card from "../UI/Card/Card";
 import classes from "./Login.module.css";
 import Button from "../UI/Button/Button";
 
-// we don't need acces to compoent's scope, reducer is a pure function
-
 function emailReducer(state, action) {
   switch (action.type) {
     case "USER_EMAIL_INPUT":
@@ -44,17 +42,26 @@ const Login = (props) => {
     isValid: null,
   });
 
+  /**
+   * EFFECT OPTIMIZATION: we use oject destructuring to minimize the number of times
+   * our effect executes. There exists a case where the email and password are already
+   * valid. For exmaple, it will be unecessary to update `formIsValid` if the user
+   * continues to add characters to their password.
+   */
+  const { isValid: isEmailValid } = emailState;
+  const { isValid: isPasswordValid } = passwordState;
+
   useEffect(() => {
     const identifier = setTimeout(() => {
       console.log("Checking for validity");
-      setFormIsValid(emailState.isValid && passwordState.isValid);
+      setFormIsValid(isEmailValid && isPasswordValid);
     }, 500);
 
     return () => {
       console.log("CLEAN UP");
       clearTimeout(identifier);
     };
-  }, [emailState, passwordState]);
+  }, [isEmailValid, isPasswordValid]);
 
   const emailChangeHandler = (event) => {
     dispatchEmail({ type: "USER_EMAIL_INPUT", payload: event.target.value });
