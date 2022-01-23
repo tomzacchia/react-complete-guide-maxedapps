@@ -3,6 +3,7 @@ import React, { useState, useEffect } from "react";
 import Login from "./components/Login/Login";
 import Home from "./components/Home/Home";
 import MainHeader from "./components/MainHeader/MainHeader";
+import AuthContext from "store/auth-context";
 
 function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -24,18 +25,15 @@ function App() {
   };
 
   return (
-    <React.Fragment>
-      {/* 
-        NOTE: we pass 'isLoggedIn' and 'logoutHandler' as props into MainHeader
-        however MainHeader only uses these props to pass them into the
-        Navigation component. Instead of prop drilling we can leverage contextAPI
-      */}
-      <MainHeader isAuthenticated={isLoggedIn} onLogout={logoutHandler} />
+    // NOTE: 1) provide context to all children of contextObj.Provider component
+    <AuthContext.Provider value={{ isLoggedIn: isLoggedIn }}>
+      <MainHeader onLogout={logoutHandler} />
+      {/* <MainHeader isAuthenticated={isLoggedIn} onLogout={logoutHandler} /> */}
       <main>
         {!isLoggedIn && <Login onLogin={loginHandler} />}
         {isLoggedIn && <Home onLogout={logoutHandler} />}
       </main>
-    </React.Fragment>
+    </AuthContext.Provider>
   );
 }
 
