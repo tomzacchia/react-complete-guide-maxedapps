@@ -3,7 +3,7 @@ import AuthContext from "store/auth-context";
 
 import classes from "./Navigation.module.css";
 
-const Navigation = (props) => {
+const Navigation = () => {
   // NOTE: pass in pointer to AuthContext instance, we get back context value
   const context = useContext(AuthContext);
 
@@ -22,7 +22,8 @@ const Navigation = (props) => {
         )}
         {context.isLoggedIn && (
           <li>
-            <button onClick={props.onLogout}>Logout</button>
+            {/* NOTE: consuming context method */}
+            <button onClick={context.onLogout}>Logout</button>
           </li>
         )}
       </ul>

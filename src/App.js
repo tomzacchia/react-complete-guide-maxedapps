@@ -25,10 +25,10 @@ function App() {
   };
 
   return (
-    // NOTE: 1) provide context to all children of contextObj.Provider component
-    <AuthContext.Provider value={{ isLoggedIn: isLoggedIn }}>
+    <AuthContext.Provider
+      value={{ isLoggedIn: isLoggedIn, onLogout: logoutHandler }}
+    >
       <MainHeader onLogout={logoutHandler} />
-      {/* <MainHeader isAuthenticated={isLoggedIn} onLogout={logoutHandler} /> */}
       <main>
         {!isLoggedIn && <Login onLogin={loginHandler} />}
         {isLoggedIn && <Home onLogout={logoutHandler} />}
