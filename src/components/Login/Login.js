@@ -12,28 +12,32 @@ const Login = (props) => {
   const [formIsValid, setFormIsValid] = useState(false);
 
   /**
-   * NOTE: useEffect to validate form inputs. Checking form validity in response
-   * to use entering data can be considered a side-effect. Run code in response
-   * to another action, i.e component loaded
+   * DEBOUNCING USER INPUT
+   *
+   * cleanup function runs before every re-render, except first render
+   * we clear timers that were queued before clean up function executes.
+   * for successive keystrokes this allows us to only have one timeout in callback queue
+   * at a time. We can also use this for http requests.
    */
   useEffect(() => {
-    setFormIsValid(enteredEmail.includes("@") && enteredPassword.length > 6);
+    const identifier = setTimeout(() => {
+      console.log("Checking for validity");
+      // update form validity
+      setFormIsValid(enteredEmail.includes("@") && enteredPassword.length > 6);
+    }, 500);
+
+    return () => {
+      console.log("CLEAN UP");
+      clearTimeout(identifier);
+    };
   }, [enteredEmail, enteredPassword]);
 
   const emailChangeHandler = (event) => {
     setEnteredEmail(event.target.value);
-
-    // setFormIsValid(
-    //   event.target.value.includes('@') && enteredPassword.trim().length > 6
-    // );
   };
 
   const passwordChangeHandler = (event) => {
     setEnteredPassword(event.target.value);
-
-    // setFormIsValid(
-    //   event.target.value.trim().length > 6 && enteredEmail.includes('@')
-    // );
   };
 
   const validateEmailHandler = () => {
