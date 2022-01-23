@@ -17,11 +17,21 @@ function emailReducer(state, action) {
   }
 }
 
+function passwordReducer(state, action) {
+  switch (action.type) {
+    case "USER_PASSWORD_INPUT":
+      return {
+        value: action.payload,
+        isValid: action.payload.trim().length > 6,
+      };
+    case "INPUT_BLUR":
+      return { ...state, isValid: state.value.trim().length > 6 };
+    default:
+      return { value: "", isValid: false };
+  }
+}
+
 const Login = (props) => {
-  // const [enteredEmail, setEnteredEmail] = useState("");
-  // const [emailIsValid, setEmailIsValid] = useState();
-  const [enteredPassword, setEnteredPassword] = useState("");
-  const [passwordIsValid, setPasswordIsValid] = useState();
   const [formIsValid, setFormIsValid] = useState(false);
 
   const [emailState, dispatchEmail] = useReducer(emailReducer, {
@@ -29,35 +39,32 @@ const Login = (props) => {
     isValid: null,
   });
 
-  /**
-   * useReducer is good in cases where we depend on 2 or more pieces of state
-   * not related to the current state updating function, see below
-   *
-   * code: setFormIsValid(enteredEmail.includes("@") && enteredPassword.length > 6);
-   *
-   * NOTE:
-   * 1) setFormIsValid is for formIsValid state.
-   * 2) It is possible that enteredEmail & enteredPassword are stale
-   */
+  const [passwordState, dispatchPassowrd] = useReducer(passwordReducer, {
+    value: "",
+    isValid: null,
+  });
 
-  // useEffect(() => {
-  //   const identifier = setTimeout(() => {
-  //     console.log("Checking for validity");
-  //     setFormIsValid(emailState.isValid && enteredPassword.length > 6);
-  //   }, 500);
+  useEffect(() => {
+    const identifier = setTimeout(() => {
+      console.log("Checking for validity");
+      setFormIsValid(emailState.isValid && passwordState.isValid);
+    }, 500);
 
-  //   return () => {
-  //     console.log("CLEAN UP");
-  //     clearTimeout(identifier);
-  //   };
-  // }, [enteredEmail, enteredPassword]);
+    return () => {
+      console.log("CLEAN UP");
+      clearTimeout(identifier);
+    };
+  }, [emailState, passwordState]);
 
   const emailChangeHandler = (event) => {
     dispatchEmail({ type: "USER_EMAIL_INPUT", payload: event.target.value });
   };
 
   const passwordChangeHandler = (event) => {
-    setEnteredPassword(event.target.value);
+    dispatchPassowrd({
+      type: "USER_PASSWORD_INPUT",
+      payload: event.target.value,
+    });
   };
 
   const validateEmailHandler = () => {
@@ -65,12 +72,12 @@ const Login = (props) => {
   };
 
   const validatePasswordHandler = () => {
-    setPasswordIsValid(enteredPassword.trim().length > 6);
+    dispatchPassowrd({ type: "INPUT_BLUR" });
   };
 
   const submitHandler = (event) => {
     event.preventDefault();
-    props.onLogin(emailState.value, enteredPassword);
+    props.onLogin(emailState.value, passwordState.value);
   };
 
   return (
@@ -92,14 +99,14 @@ const Login = (props) => {
         </div>
         <div
           className={`${classes.control} ${
-            passwordIsValid === false ? classes.invalid : ""
+            passwordState.isValid === false ? classes.invalid : ""
           }`}
         >
           <label htmlFor="password">Password</label>
           <input
             type="password"
             id="password"
-            value={enteredPassword}
+            value={passwordState.value}
             onChange={passwordChangeHandler}
             onBlur={validatePasswordHandler}
           />
