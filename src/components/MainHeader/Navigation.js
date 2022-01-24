@@ -7,6 +7,8 @@ const Navigation = () => {
   // NOTE: pass in pointer to AuthContext instance, we get back context value
   const context = useContext(AuthContext);
 
+  console.log("NAV rendered");
+
   return (
     <nav className={classes.nav}>
       <ul>

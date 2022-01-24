@@ -7,6 +7,7 @@ import AuthContext from "store/auth-context";
 
 function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [otherState, setOtherState] = useState(0);
 
   useEffect(() => {
     const userLoginInformation = localStorage.getItem("isLoggedIn");
@@ -14,24 +15,40 @@ function App() {
   }, []);
 
   const loginHandler = (email, password) => {
-    // We should of course check email and password
-    // But it's just a dummy/ demo anyways
     setIsLoggedIn(true);
     localStorage.setItem("isLoggedIn", "1");
   };
 
-  const logoutHandler = () => {
+  const logoutHandler = React.useCallback(() => {
     setIsLoggedIn(false);
-  };
+  }, [setIsLoggedIn]);
+
+  function otherStateHandler() {
+    setOtherState((prevState) => {
+      return (prevState += 1);
+    });
+  }
 
   return (
     <AuthContext.Provider
-      value={{ isLoggedIn: isLoggedIn, onLogout: logoutHandler }}
+      value={React.useMemo(
+        () => ({
+          isLoggedIn: isLoggedIn,
+          onLogout: logoutHandler,
+        }),
+        [isLoggedIn, logoutHandler]
+      )}
     >
       <MainHeader onLogout={logoutHandler} />
       <main>
         {!isLoggedIn && <Login onLogin={loginHandler} />}
-        {isLoggedIn && <Home onLogout={logoutHandler} />}
+        {isLoggedIn && (
+          <Home
+            onLogout={logoutHandler}
+            onOtherStateClick={otherStateHandler}
+            otherStateValue={otherState}
+          />
+        )}
       </main>
     </AuthContext.Provider>
   );
