@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 
 import MoviesList from "./components/MoviesList";
 import "./App.css";
@@ -23,17 +23,11 @@ function App() {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState(null);
 
-  async function fetchMoviesHandler() {
+  const fetchMoviesHandler = useCallback(async () => {
     try {
       setIsLoading(true);
       setError(null);
-      const response = await fetch("https://swapi.dev/api/film"); // improper URI
-      // const response = await fetch("https://swapi.dev/api/films");
-      /**
-       * NOTE: we check if the request was successful or not. the fetch API doesn't
-       * automatically throw an error, unlike Axios, so we have to manually throw
-       * one to do something in the catch block
-       */
+      const response = await fetch("https://swapi.dev/api/films");
       if (!response.ok) {
         throw new Error("Something went wrong");
       }
@@ -45,7 +39,19 @@ function App() {
       setError(error.message);
     }
     setIsLoading(false);
-  }
+  }, []);
+
+  /**
+   * NOTE: Using useEffect to load on first render. We wrap our fetchMoviesHandler
+   * in useCallback in case our handler refers to a piece of state that changes
+   * and as such a new instance of the handler managed by React's internals
+   */
+  useEffect(
+    function initialFetch() {
+      fetchMoviesHandler();
+    },
+    [fetchMoviesHandler]
+  );
 
   function getContentJSX() {
     let content = <p> No Movies Fallback</p>;
