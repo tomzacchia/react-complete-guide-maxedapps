@@ -1,37 +1,33 @@
-import React, { useCallback, useState } from "react";
-import Button from "./components/UI/Button/Button";
-import "./App.css";
-import Demo from "components/Demo/demo";
+import React from 'react';
+
+import MoviesList from './components/MoviesList';
+import './App.css';
 
 function App() {
-  const [showParagraph, setShowParagraph] = useState(false);
-  const [allowToggle, setAllowToggle] = useState(false);
-
-  /**
-   * CAUTION: When the function is defined and saved in memory it's closure
-   * holds a reference to the value that allowToggle points to  (false). If we
-   * do not specify allowToggle as a dependency of toggleParagraph,
-   * allowToggle within toggleParagraph()'s "backpack" will be stale
-   */
-  const toggleParagraph = useCallback(() => {
-    if (allowToggle) {
-      setShowParagraph((prevState) => !prevState);
-    }
-  }, []);
-
-  function allowToggleHandler() {
-    setAllowToggle(true);
-  }
-
-  console.log("App running ");
+  const dummyMovies = [
+    {
+      id: 1,
+      title: 'Some Dummy Movie',
+      openingText: 'This is the opening text of the movie',
+      releaseDate: '2021-05-18',
+    },
+    {
+      id: 2,
+      title: 'Some Dummy Movie 2',
+      openingText: 'This is the second opening text of the movie',
+      releaseDate: '2021-05-19',
+    },
+  ];
 
   return (
-    <div className="app">
-      <Button onClick={allowToggleHandler}> Allow Paragraph Toggle </Button>
-      <Button onClick={toggleParagraph}> Toggle Paragraph </Button>
-      <h1>Hi there!</h1>
-      <Demo show={false} />
-    </div>
+    <React.Fragment>
+      <section>
+        <button>Fetch Movies</button>
+      </section>
+      <section>
+        <MoviesList movies={dummyMovies} />
+      </section>
+    </React.Fragment>
   );
 }
 
