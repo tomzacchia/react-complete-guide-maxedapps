@@ -20,13 +20,16 @@ const dummyMovies = [
 
 function App() {
   const [movies, setMovies] = useState([]);
+  const [isLoading, setIsLoading] = useState(false);
 
-  // CODE ONLY:
   async function fetchMoviesHandler() {
+    setIsLoading(true);
     const response = await fetch("https://swapi.dev/api/films");
     const data = await response.json();
+
     const moviesArray = data.results;
     setMovies(moviesArray.map(mapMovieToNewKeys));
+    setIsLoading(false);
   }
 
   // useEffect();
@@ -37,7 +40,10 @@ function App() {
         <button onClick={fetchMoviesHandler}>Fetch Movies</button>
       </section>
       <section>
-        <MoviesList movies={movies} />
+        {/* NOTE: Conditional rendering with HTTP and Flags */}
+        {isLoading && <p> Loding... </p>}
+        {!isLoading && movies.length > 0 && <MoviesList movies={movies} />}
+        {!isLoading && movies.length === 0 && <p> No Movies Fallback</p>}
       </section>
     </React.Fragment>
   );
