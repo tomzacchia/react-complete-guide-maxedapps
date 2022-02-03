@@ -5,23 +5,29 @@ import Demo from "components/Demo/demo";
 
 function App() {
   const [showParagraph, setShowParagraph] = useState(false);
+  const [allowToggle, setAllowToggle] = useState(false);
 
   /**
-   * NOTE: useCallback tells React to store function body somewhere in internal
-   * memory and refernce that definition instead of passing down a different
-   * reference. usecallback is used with React.memo to prevent re-evaluating
-   * children components.
-   *
-   * NOTE: useState handlers are memoized, therefore not needed in depedency array
+   * CAUTION: When the function is defined and saved in memory it's closure
+   * holds a reference to the value that allowToggle points to  (false). If we
+   * do not specify allowToggle as a dependency of toggleParagraph,
+   * allowToggle within toggleParagraph()'s "backpack" will be stale
    */
   const toggleParagraph = useCallback(() => {
-    setShowParagraph((prevState) => !prevState);
+    if (allowToggle) {
+      setShowParagraph((prevState) => !prevState);
+    }
   }, []);
+
+  function allowToggleHandler() {
+    setAllowToggle(true);
+  }
 
   console.log("App running ");
 
   return (
     <div className="app">
+      <Button onClick={allowToggleHandler}> Allow Paragraph Toggle </Button>
       <Button onClick={toggleParagraph}> Toggle Paragraph </Button>
       <h1>Hi there!</h1>
       <Demo show={false} />
