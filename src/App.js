@@ -21,30 +21,50 @@ const dummyMovies = [
 function App() {
   const [movies, setMovies] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState(null);
 
   async function fetchMoviesHandler() {
-    setIsLoading(true);
-    const response = await fetch("https://swapi.dev/api/films");
-    const data = await response.json();
+    try {
+      setIsLoading(true);
+      setError(null);
+      const response = await fetch("https://swapi.dev/api/film"); // improper URI
+      // const response = await fetch("https://swapi.dev/api/films");
+      /**
+       * NOTE: we check if the request was successful or not. the fetch API doesn't
+       * automatically throw an error, unlike Axios, so we have to manually throw
+       * one to do something in the catch block
+       */
+      if (!response.ok) {
+        throw new Error("Something went wrong");
+      }
+      const data = await response.json();
 
-    const moviesArray = data.results;
-    setMovies(moviesArray.map(mapMovieToNewKeys));
+      const moviesArray = data.results;
+      setMovies(moviesArray.map(mapMovieToNewKeys));
+    } catch (error) {
+      setError(error.message);
+    }
     setIsLoading(false);
   }
 
-  // useEffect();
+  function getContentJSX() {
+    let content = <p> No Movies Fallback</p>;
+
+    if (movies.length > 0) content = <MoviesList movies={movies} />;
+
+    if (error) content = <p>{error}</p>;
+
+    if (isLoading) content = <p> Loding... </p>;
+
+    return content;
+  }
 
   return (
     <React.Fragment>
       <section>
         <button onClick={fetchMoviesHandler}>Fetch Movies</button>
       </section>
-      <section>
-        {/* NOTE: Conditional rendering with HTTP and Flags */}
-        {isLoading && <p> Loding... </p>}
-        {!isLoading && movies.length > 0 && <MoviesList movies={movies} />}
-        {!isLoading && movies.length === 0 && <p> No Movies Fallback</p>}
-      </section>
+      <section>{getContentJSX()}</section>
     </React.Fragment>
   );
 }
