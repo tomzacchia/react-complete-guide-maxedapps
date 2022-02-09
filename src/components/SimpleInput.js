@@ -1,12 +1,7 @@
 import { useRef, useState } from "react";
 const SimpleInput = (props) => {
-  /**
-   *  NOTE: ref is practical when we only care about value on submission
-   *  - with controlled components we can also reset field values on submission
-   *  - we can reset fields using ref via ref.current.value = '', however direct DOM manipulation is not recommended
-   */
-
   const [enteredName, setEnteredName] = useState("");
+  const [enteredNameIsValid, setEnteredNameIsValid] = useState(false);
   const nameInputRef = useRef();
 
   function nameInputChangeHandler(event) {
@@ -16,13 +11,24 @@ const SimpleInput = (props) => {
   function formSubmitHandler(event) {
     event.preventDefault();
 
+    if (enteredName.trim() === "") {
+      setEnteredNameIsValid(false);
+      return;
+    }
+
+    setEnteredNameIsValid(true);
+
     console.log(enteredName);
     console.log(nameInputRef.current.value);
   }
 
+  const nameInputClasses = enteredNameIsValid
+    ? "form-control"
+    : "form-control invalid";
+
   return (
     <form onSubmit={formSubmitHandler}>
-      <div className="form-control">
+      <div className={nameInputClasses}>
         <label htmlFor="name">Your Name</label>
         <input
           ref={nameInputRef}
@@ -31,6 +37,9 @@ const SimpleInput = (props) => {
           onChange={nameInputChangeHandler}
           value={enteredName}
         />
+        {!enteredNameIsValid && (
+          <p className="error-text">Name cannot be empty</p>
+        )}
       </div>
       <div className="form-actions">
         <button>Submit</button>
