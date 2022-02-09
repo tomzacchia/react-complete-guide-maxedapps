@@ -1,42 +1,46 @@
 import { useEffect, useRef, useState } from "react";
 const SimpleInput = (props) => {
   const [enteredName, setEnteredName] = useState("");
-  const [enteredNameIsValid, setEnteredNameIsValid] = useState(false);
+  // const [enteredNameIsValid, setEnteredNameIsValid] = useState(false);
   const [enteredNameTouched, setEnteredNameTouched] = useState(false);
 
   /**
-   * NOTE: if we want to perform some API request when the form control
-   *  goes from invalid to valid, we need to set enteredNameIsValid=false
-   *  by default. Because if enteredNameIsValid=true, our side effect is executed
-   *  as such we need an additional flag to prevent showing error in UI before
-   *  the user has a chance to touch the form field
+   * Note: enteredNameIsValid is dependent on the enteredName state,
+   * since our component function body is re-evaluated on every state change
+   * we can create a new constant for each re-render. formSubmitHandler()
+   * will also have access to fresh enteredNameIsValid flag
    */
-
-  useEffect(() => {
-    if (enteredNameIsValid) {
-      console.log("do something, i.e API request to validate user input");
-    }
-  }, [enteredNameIsValid]);
+  const enteredNameIsValid = enteredName.trim() !== "";
+  const nameInputIsInvalid = !enteredNameIsValid && enteredNameTouched;
 
   function nameInputChangeHandler(event) {
     setEnteredName(event.target.value);
+    // if (event.target.value.trim() !== "") {
+    //   setEnteredNameIsValid(true);
+    // }
+  }
+
+  function nameInputBlurHandler(event) {
+    setEnteredNameTouched(true);
+    // if (event.target.value.trim() === "") {
+    //   setEnteredNameIsValid(false);
+    // }
   }
 
   function formSubmitHandler(event) {
     event.preventDefault();
     setEnteredNameTouched(true);
 
-    if (enteredName.trim() === "") {
-      setEnteredNameIsValid(false);
+    if (!enteredNameIsValid) {
       return;
     }
 
-    setEnteredNameIsValid(true);
+    // setEnteredNameIsValid(true);
 
-    console.log(enteredName);
+    // reset controlled input state on submission
+    setEnteredName("");
+    setEnteredNameTouched(false);
   }
-
-  const nameInputIsInvalid = !enteredNameIsValid && enteredNameTouched;
 
   const nameInputClasses = nameInputIsInvalid
     ? "form-control invalid"
@@ -50,6 +54,7 @@ const SimpleInput = (props) => {
           type="text"
           id="name"
           onChange={nameInputChangeHandler}
+          onBlur={nameInputBlurHandler}
           value={enteredName}
         />
         {nameInputIsInvalid && (
