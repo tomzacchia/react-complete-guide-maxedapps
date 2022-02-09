@@ -1,8 +1,22 @@
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 const SimpleInput = (props) => {
   const [enteredName, setEnteredName] = useState("");
   const [enteredNameIsValid, setEnteredNameIsValid] = useState(false);
-  const nameInputRef = useRef();
+  const [enteredNameTouched, setEnteredNameTouched] = useState(false);
+
+  /**
+   * NOTE: if we want to perform some API request when the form control
+   *  goes from invalid to valid, we need to set enteredNameIsValid=false
+   *  by default. Because if enteredNameIsValid=true, our side effect is executed
+   *  as such we need an additional flag to prevent showing error in UI before
+   *  the user has a chance to touch the form field
+   */
+
+  useEffect(() => {
+    if (enteredNameIsValid) {
+      console.log("do something, i.e API request to validate user input");
+    }
+  }, [enteredNameIsValid]);
 
   function nameInputChangeHandler(event) {
     setEnteredName(event.target.value);
@@ -10,6 +24,7 @@ const SimpleInput = (props) => {
 
   function formSubmitHandler(event) {
     event.preventDefault();
+    setEnteredNameTouched(true);
 
     if (enteredName.trim() === "") {
       setEnteredNameIsValid(false);
@@ -19,25 +34,25 @@ const SimpleInput = (props) => {
     setEnteredNameIsValid(true);
 
     console.log(enteredName);
-    console.log(nameInputRef.current.value);
   }
 
-  const nameInputClasses = enteredNameIsValid
-    ? "form-control"
-    : "form-control invalid";
+  const nameInputIsInvalid = !enteredNameIsValid && enteredNameTouched;
+
+  const nameInputClasses = nameInputIsInvalid
+    ? "form-control invalid"
+    : "form-control ";
 
   return (
     <form onSubmit={formSubmitHandler}>
       <div className={nameInputClasses}>
         <label htmlFor="name">Your Name</label>
         <input
-          ref={nameInputRef}
           type="text"
           id="name"
           onChange={nameInputChangeHandler}
           value={enteredName}
         />
-        {!enteredNameIsValid && (
+        {nameInputIsInvalid && (
           <p className="error-text">Name cannot be empty</p>
         )}
       </div>
