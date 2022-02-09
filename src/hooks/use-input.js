@@ -5,6 +5,7 @@ function useInput(validate) {
   const [isTouched, setIsTouched] = useState(false);
 
   const valueIsValid = validate(value);
+  // hasError prevents error message to display after first render since valueIsValid === false
   const hasError = !valueIsValid && isTouched;
 
   function valueChangeHandler(event) {
